@@ -24,15 +24,15 @@ module Patento
     end
     
     def inventors
-      @inventors ||= parse_bibdata_for_key('q=ininventor:')
+      @inventors ||= parse_bibdata_links_for_url_match('q=ininventor:')
     end
     
     def assignee
-      @assignee ||= parse_bibdata_for_key('q=inassignee:')
+      @assignee ||= parse_bibdata_links_for_url_match('q=inassignee:')
     end
     
     def us_classifications
-      @us_classifications ||= parse_bibdata_for_key('q=http://www.uspto.gov/web/patents/classification/')
+      @us_classifications ||= parse_bibdata_links_for_url_match('q=http://www.uspto.gov/web/patents/classification/')
     end
 
 		def intl_classification
@@ -53,7 +53,11 @@ module Patento
 		end
 		
 		def backward_citations
-			@backward_citations ||= parse_backward_citations
+			@backward_citations ||= parse_citations(:backward)
+		end
+		
+		def forward_citations
+			@forward_citations ||= parse_citations(:forward)
 		end
 		
 		def independent_claims
@@ -68,8 +72,9 @@ module Patento
     
     # Helpers
 
-		def parse_backward_citations
-			trs = @html.css('#patent_citations_v tr')
+		def parse_citations(type)
+			container = (type == :backward ? '#patent_citations_v tr' : '#patent_referenced_by_v tr')
+			trs = @html.css(container)
 			trs.shift
 			citations = []
 			trs.each do |row|
@@ -84,15 +89,16 @@ module Patento
 			return citations
 		end
 
+	
 		def parse_date(type)
 			nodes = @html.css('#metadata_v .patent_bibdata p').children
 			index = (type == :filing ? 4 : 7)
 			Date.parse(nodes[index].text)
 		end
 
-    def parse_bibdata_for_key(key)
+    def parse_bibdata_links_for_url_match(pattern)
       @matches = @html.css('#summarytable div.patent_bibdata a').to_a
-      @matches.collect! { |link| link.text if link.attr('href').match(key) }     
+      @matches.collect! { |link| link.text if link.attr('href').match(pattern) }     
       @matches.compact!
       @matches = @matches.first if @matches.count == 1
       return @matches

@@ -119,6 +119,38 @@ describe Patent do
 		
 		end
 		
+		
+		
+		describe "forward citations" do
+			
+			describe "list" do
+				its(:forward_citations) { should be_an_instance_of Array }
+			  its(:forward_citations) { should have(252).items}
+			end
+		  
+			describe "individual citation" do
+				let(:citation) { patent.forward_citations.first}
+		  	subject { citation }
+				it { should be_an_instance_of Hash }
+				it "should have a number" do
+				  citation[:number].should == '6098100'
+				end
+				it "should have a filing date" do
+				  citation[:filing].should == Date.parse('Jun 8, 1998')
+				end
+				it "should have an issue date" do
+				  citation[:issue].should == Date.parse('Aug 1, 2000')
+				end
+				it "should have an assignee" do
+				  citation[:assignee].should == 'Silicon Integrated Systems Corp.'
+				end
+				it "should have a title" do
+				  citation[:title].should == 'Method and apparatus for detecting a wake packet issued by a network device to a sleeping node'
+				end
+			end
+		
+		end
+		
   end
   
 	describe "parsing a patent with multi-level claims" do
