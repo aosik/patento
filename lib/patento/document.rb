@@ -3,6 +3,17 @@ module Patento
 		
 		attr_accessor :number, :html
     
+		# Note: attributes are lazily evaluated
+    def initialize(number, options = {})
+      @number = number.to_s
+			if options[:local_path]
+				@html = Nokogiri::HTML(File.read(options[:local_path]))
+			else
+      	@html = Nokogiri::HTML(Patento.download_html(number))
+			end
+    end
+
+
     # Attributes
     def title
       @title ||= @html.css('.main-title').text.split(' - ')[1]
@@ -23,26 +34,13 @@ module Patento
     def us_classifications
       @us_classifications ||= parse_bibdata_links_for_url_match('q=http://www.uspto.gov/web/patents/classification/')
     end
-
-		def intl_classification
-			# Wow this was a pain
-			@intl_classification ||= @html.css('#summarytable div.patent_bibdata').children[-7].text.match(/([A-Z0-9]{1,}\s[A-Z0-9]{1,})/)[1]
-		end
     
 		def filing_date
 			@filing_date ||= parse_date(:filing)
 		end
 		
-		def issue_date
-			@issue_date ||= parse_date(:issue)
-		end
-		
 		def claims
 			@claims ||= Claim.parse_claims(@html)
-		end
-		
-		def backward_citations
-			@backward_citations ||= parse_citations(:backward)
 		end
 		
 		def forward_citations

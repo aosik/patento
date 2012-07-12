@@ -1,17 +1,20 @@
 module Patento
   
   class Patent < Document
-
-		# Note: attributes are lazily evaluated
-    def initialize(number, options = {})
-      @number = number.to_s
-			if options[:local_path]
-				@html = Nokogiri::HTML(File.read(options[:local_path]))
-			else
-      	@html = Nokogiri::HTML(Patento.download_html(number))
-			end
-    end
-
+		
+		def issue_date
+			@issue_date ||= parse_date(:issue)
+		end
+		
+		def intl_classification
+			# Wow this was a pain
+			@intl_classification ||= @html.css('#summarytable div.patent_bibdata').children[-7].text.match(/([A-Z0-9]{1,}\s[A-Z0-9]{1,})/)[1]
+		end
+		
+		def backward_citations
+			@backward_citations ||= parse_citations(:backward)
+		end
+		
   end
     
   

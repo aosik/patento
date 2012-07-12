@@ -161,8 +161,6 @@ describe Patent do
 		end
 		
 		it "should have a nested body" do
-			require 'pp'
-			pp patent.claims.first.body
 		  patent.claims.first.body.count.should == 4
 		end
 	
