@@ -52,6 +52,10 @@ module Patento
 			@claims ||= Claim.parse_claims(@html)
 		end
 		
+		def backward_citations
+			@backward_citations ||= parse_backward_citations
+		end
+		
 		def independent_claims
 			independent_claims = []
 			claims.each do |c| 
@@ -63,6 +67,22 @@ module Patento
 		end
     
     # Helpers
+
+		def parse_backward_citations
+			trs = @html.css('#patent_citations_v tr')
+			trs.shift
+			citations = []
+			trs.each do |row|
+				citations << {
+					number: row.css('td')[0].css('a').text.gsub(/^US/, ''),
+					filing: Date.parse(row.css('td')[1].text),
+					issue: Date.parse(row.css('td')[2].text),
+					assignee: row.css('td')[3].text,
+					title: row.css('td')[4].text
+				}
+			end				
+			return citations
+		end
 
 		def parse_date(type)
 			nodes = @html.css('#metadata_v .patent_bibdata p').children
