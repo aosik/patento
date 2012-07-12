@@ -31,6 +31,7 @@ Gem::Specification.new do |s|
     "lib/patento/document.rb",
     "lib/patento/patent.rb",
     "lib/patento/publication.rb",
+    "patento.gemspec",
     "spec/claim_spec.rb",
     "spec/data/US20100268739.html",
     "spec/data/US6000000.html",
