@@ -17,9 +17,9 @@ Jeweler::Tasks.new do |gem|
   gem.name = "patento"
   gem.homepage = "http://github.com/aosik/patento"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "maverick@mavcat.com"
+  gem.summary = %Q{Patento is a simple gem for scraping Google Patents and formatting the visible data into objects and hashes.}
+  gem.description = %Q{Patento is a simple gem for scraping Google Patents and formatting the visible data into objects and hashes. See the README for more details}
+  gem.email = "george.zalepa@gmail.com"
   gem.authors = ["George Zalepa"]
   # dependencies defined in Gemfile
 end
