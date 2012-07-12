@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'net/http'
+require 'date'
 
 require 'patento/document'
 require 'patento/patent'
