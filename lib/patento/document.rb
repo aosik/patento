@@ -23,6 +23,12 @@ module Patento
       @abstract ||= @html.css('.patent_abstract_text').text
     end
     
+    def serial
+      return @serial if @serial
+      @serial = @html.css('#metadata_v p a').text.gsub(/[^\d]/, '')
+      @serial = @serial.empty? ? nil : @serial
+    end
+    
     def inventors
       @inventors ||= parse_bibdata_links_for_url_match('q=ininventor:')
     end

@@ -21,6 +21,8 @@ Patento retrieves the following data:
 1. Patent Number (`String`): `patent.number`
 2. Title (`String`): `patent.title`
 3. Abstract (`String`): `patent.abstract`
+3. Serial (`String` or nil, see **note**): `patent.serial`
+  * ***Note***: Patento can only return the serial if it is present at Google (compare patent 6000000 with 7114060). If Google doesn't provide it, serial will be nil
 4. Inventors (`Array` of `String` objects): `patent.inventors`
 5. Assignee (`String`): `patent.assignee`
 6. U.S. Classifications (`Array` of `String` objects): `patent.us_classifications`
