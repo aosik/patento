@@ -1,7 +1,3 @@
 module Patento
-	
-	class Publication < Document
-		
-	end
-	
+  class Publication < Document; end
 end
